@@ -1,0 +1,80 @@
+version: '2'
+services:
+  ## 数据缓存服务
+  redis:
+    image: redis:6.2.6
+    container_name: sdf-redis
+    command: redis-server /etc/redis/redis.conf --appendonly yes
+    restart: always
+    privileged: true
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    volumes:
+      - ${REDIS_VOL_CONF_PATH}:/etc/redis/redis.conf
+      - ${REDIS_VOL_DATA_PATH}:/data
+  ## 后端网关
+  tedgeopen:
+    image: iotportal/tedgeopen:isv1.0.1
+    container_name: tedgeopen
+    environment:
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_DB: ${REDIS_DB}
+      REDIS_POOLSIZE: ${REDIS_POOLSIZE}
+      WEBPORT: ${TEDGEOPEN_PORT}
+    links:
+      -  "redis:redis"
+    ports:
+      - ${TEDGEOPEN_PORT}:${TEDGEOPEN_PORT}
+    volumes:
+      - ${TEDGEOPEN_VOL_LOG_PATH}:/home/docker/logs
+    restart: always
+  ## 基础服务
+  sdf-basic-micro:
+    image: iotportal/sdf-basic-micro:latest
+    links:
+      - redis
+      - tedgeopen
+    container_name: sdf-basic-micro
+    volumes:
+      - ${BASIC_VOL_LOG_PATH}:/data/app/logs/
+    environment:
+      HIGHWAY_URL: ${HIGHWAY_URL}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      PORT: ${BASIC_PORT}
+    ports:
+      - ${BASIC_PORT}:${BASIC_PORT}
+    depends_on:
+      - redis
+      - tedgeopen
+    restart: always
+  ## 前端网关
+  sdf-fgw:
+    image: registry.shdocker.tuya-inc.top/sdf-public/sdf-gw:isv0.0.1
+    links:
+      - tedgeopen
+      - redis
+      - sdf-basic-micro
+    container_name: sdf-fgw
+    environment:
+      MICRO_APP_RESOURCE_PREFIX: ${MICRO_APP_RESOURCE_PREFIX}
+      CUSTOM_HIGHWAY_URL: ${TEDGEOPEN_URL}
+      HIGHWAY_URL: ${HIGHWAY_URL}
+      MICRO_APP_WEB_URL: ${BASIC_URL}
+      MICRO_APP_WEB_PRIVATE_KEY: ${PRIVATE_KEY}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      DEVELOPER_CODE: ${DEVELOPER_CODE}
+      DEVELOPER_KEY: ${DEVELOPER_KEY}
+      PORT: ${FGW_PORT}
+    depends_on:
+      - tedgeopen
+      - redis
+      - sdf-basic-micro
+    ports:
+      - ${FGW_PORT}:${FGW_PORT}
+    restart: always

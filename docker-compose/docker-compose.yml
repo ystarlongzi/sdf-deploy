@@ -45,6 +45,9 @@ services:
       REDIS_PORT: ${REDIS_PORT}
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       PORT: ${BASIC_PORT}
+      DEVELOPER_CODE: ${DEVELOPER_CODE}
+      DEVELOPER_KEY: ${DEVELOPER_KEY}
+      MICRO_APP_EXTERNAL_HOST: ${MICRO_APP_EXTERNAL_HOST}
     ports:
       - ${BASIC_PORT}:${BASIC_PORT}
     depends_on:
@@ -60,7 +63,7 @@ services:
       - sdf-basic-micro
     container_name: sdf-fgw
     environment:
-      MICRO_APP_RESOURCE_PREFIX: ${MICRO_APP_RESOURCE_PREFIX}
+      MICRO_APP_RESOURCE_PREFIX: ${MICRO_APP_EXTERNAL_HOST}/sdf/micro-app/developer/app/resources
       CUSTOM_HIGHWAY_URL: ${TEDGEOPEN_URL}
       HIGHWAY_URL: ${HIGHWAY_URL}
       MICRO_APP_WEB_URL: ${BASIC_URL}

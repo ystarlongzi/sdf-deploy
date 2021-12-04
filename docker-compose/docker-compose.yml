@@ -56,7 +56,7 @@ services:
     restart: always
   ## 前端网关
   sdf-fgw:
-    image: registry.shdocker.tuya-inc.top/sdf-public/sdf-gw:20211202215919
+    image: iotportal/sdf-gw:latest
     links:
       - tedgeopen
       - redis

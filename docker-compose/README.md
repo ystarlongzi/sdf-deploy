@@ -3,8 +3,6 @@
 开发者服务依赖docker环境，请提前安装docker！
 修改config.properties自定义开发者服务配置！
 使用root权限启动开发者服务!
-首次启动需通过以下页面配置您的Saas项目
-http://localhost:9881/sdf/config
 
 ####运行环境
 操作系统：支持linux CentOS，Windows，暂不支持mac M1系统
@@ -12,7 +10,6 @@ http://localhost:9881/sdf/config
 端口：默认2828、3000、9881端口
 CPU&内存：1核1G（最小），2核2G（推荐）
 磁盘：2G（最小），5G（推荐）
-
 
 #### 1.申请开发者账号 developerCode/secretKey
 

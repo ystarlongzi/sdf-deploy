@@ -3,7 +3,7 @@ REM usage
 SET show_code_error= isv service up failed!!! developer code must not be empty!!!
 SET show_key_error=  isv service up failed!!! developer key can not be empty!!!
 REM after start
-SET after_start=isv service up successful!! next step maybe config your saas on  http://localhost:9881/sdf/config
+SET after_start=isv service up successful!!
 REM developer code
 SET /p DEVELOPER_CODE=Developer Code:
 REM developer key

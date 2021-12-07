@@ -3,7 +3,7 @@ show_usage="args: [-devc, -devk]"
 ### example
 show_example="For example: [./startup.sh -devc yourDeveloperCode -devk yourDeveloperKey]"
 ### after start
-after_start="isv service up successful!! next step maybe config your saas on  http://localhost:9881/sdf/config"
+after_start="isv service up successful!!!"
 ### developer code
 DEVELOPER_CODE=""
 ### developer key

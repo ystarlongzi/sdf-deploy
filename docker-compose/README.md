@@ -2,7 +2,7 @@
 
 开发者服务依赖docker环境，请提前安装docker！  
 修改config.properties自定义开发者服务配置！  
-基于docker-compose启动，未安装会自动下载docker-compose，  
+基于docker-compose启动，未安装将自动下载docker-compose，  
 请使用root权限启动开发者服务!  
 
 ## 运行环境

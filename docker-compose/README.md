@@ -22,7 +22,7 @@
 docker-compose up
 ```
 
-后台启动 
+如果想要后台启动服务， 可以添加 `-d` 参数
 
 ```bash
 docker-compose up -d

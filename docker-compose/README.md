@@ -5,11 +5,11 @@
 基于docker-compose启动，如未安装docker-compose会自动下载，使用root权限启动开发者服务!
 
 ## 运行环境
-操作系统：支持linux CentOS，Windows，暂不支持mac M1系统
-软环境：Docker环境
-端口：默认占用2828、3000、6379、9881端口
-CPU&内存：1核1G（最小），2核2G（推荐）
-磁盘：2G（最小），5G（推荐）
+##### 操作系统：支持linux CentOS，Windows，暂不支持mac M1系统
+##### 软件环境：Docker环境
+##### 端口：默认占用2828、3000、6379、9881端口
+##### CPU&内存：1核1G（最小），2核2G（推荐）
+##### 磁盘：2G（最小），5G（推荐）
 
 ### 1. 申请开发者账号 developerCode/secretKey
 

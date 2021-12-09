@@ -3,32 +3,29 @@ services:
   ## 数据缓存服务
   redis:
     image: redis:6.2.6
-    container_name: sdf-redis
     command: redis-server /etc/redis/redis.conf --appendonly yes
+    container_name: sdf-redis
     restart: always
-    privileged: true
-    ports:
-      - ${REDIS_PORT}:${REDIS_PORT}
     volumes:
-      - ${REDIS_VOL_CONF_PATH}:/etc/redis/redis.conf
-      - ${REDIS_VOL_DATA_PATH}:/data
+      - './redis/conf/redis.conf:/etc/redis/redis.conf'
+      - './redis/data:/data'
   ## 后端网关
   tedgeopen:
     image: iotportal/tedgeopen:isv1.0.1
     container_name: tedgeopen
-    environment:
-      REDIS_HOST: ${REDIS_HOST}
-      REDIS_PORT: ${REDIS_PORT}
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
-      REDIS_DB: ${REDIS_DB}
-      REDIS_POOLSIZE: ${REDIS_POOLSIZE}
-      WEBPORT: ${TEDGEOPEN_PORT}
     links:
-      -  "redis:redis"
+      - redis
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      REDIS_POOLSIZE: 10
+      WEBPORT: 2828
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
     ports:
-      - ${TEDGEOPEN_PORT}:${TEDGEOPEN_PORT}
+      - 2828:2828
     volumes:
-      - ${TEDGEOPEN_VOL_LOG_PATH}:/home/docker/logs
+      - './logs/tedgeopen-log:/home/docker/logs'
     restart: always
   ## 基础服务
   sdf-basic-micro:
@@ -38,18 +35,18 @@ services:
       - tedgeopen
     container_name: sdf-basic-micro
     volumes:
-      - ${BASIC_VOL_LOG_PATH}:/data/app/logs/
+      - './logs/basic-log:/data/app/logs'
     environment:
-      HIGHWAY_URL: ${HIGHWAY_URL}
-      REDIS_HOST: ${REDIS_HOST}
-      REDIS_PORT: ${REDIS_PORT}
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
-      PORT: ${BASIC_PORT}
+      HIGHWAY_URL: ${OPEN_API}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      PORT: 9881
       DEVELOPER_CODE: ${DEVELOPER_CODE}
       DEVELOPER_KEY: ${DEVELOPER_KEY}
       MICRO_APP_EXTERNAL_HOST: ${MICRO_APP_EXTERNAL_HOST}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
     ports:
-      - ${BASIC_PORT}:${BASIC_PORT}
+      - 9881:9881
     depends_on:
       - redis
       - tedgeopen
@@ -64,20 +61,21 @@ services:
     container_name: sdf-fgw
     environment:
       MICRO_APP_RESOURCE_PREFIX: ${MICRO_APP_EXTERNAL_HOST}/sdf/micro-app/developer/app/resources
-      CUSTOM_HIGHWAY_URL: ${TEDGEOPEN_URL}
-      HIGHWAY_URL: ${HIGHWAY_URL}
-      MICRO_APP_WEB_URL: ${BASIC_URL}
+      CUSTOM_HIGHWAY_URL: http://tedgeopen:2828
+      HIGHWAY_URL: ${OPEN_API}
+      MICRO_APP_WEB_URL: http://sdf-basic-micro:9881
       MICRO_APP_WEB_PRIVATE_KEY: ${PRIVATE_KEY}
-      REDIS_HOST: ${REDIS_HOST}
-      REDIS_PORT: ${REDIS_PORT}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       DEVELOPER_CODE: ${DEVELOPER_CODE}
+      NODE_ENV: production
       DEVELOPER_KEY: ${DEVELOPER_KEY}
-      PORT: ${FGW_PORT}
+      PORT: 3000
     depends_on:
       - tedgeopen
       - redis
       - sdf-basic-micro
     ports:
-      - ${FGW_PORT}:${FGW_PORT}
+      - 3000:3000
     restart: always

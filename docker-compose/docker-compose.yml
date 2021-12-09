@@ -77,5 +77,5 @@ services:
       - redis
       - sdf-basic-micro
     ports:
-      - 8000:3000
+      - 3000:3000
     restart: always

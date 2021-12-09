@@ -1,57 +1,51 @@
-## 开发者服务说明
-
-开发者服务依赖docker环境，请提前安装docker！  
-修改config.properties自定义开发者服务配置！  
-基于docker-compose启动，未安装将自动下载docker-compose，  
-请使用root权限启动开发者服务!  
+## 开发者服务说明，必看
 
 ## 运行环境
-操作系统：支持linux CentOS，Windows，暂不支持mac M1系统  
-软件环境：Docker环境  
-端口：默认占用2828、3000、6379、9881端口  
-CPU&内存：1核1G（最小），2核2G（推荐）  
-磁盘：2G（最小），5G（推荐）  
 
-### 1. 申请开发者账号 developerCode/secretKey
+- 操作系统：支持linux CentOS，Windows，暂不支持 mac M1 系统
+- 软件环境：Docker 环境
+- 端口：默认2828、3000、9881端口
+- CPU&内存：1核1G（最小），2核2G（推荐）
+- 磁盘：2G（最小），5G（推荐）
 
-### 2. 修改config.properties 配置文件
-#### redis配置
-REDIS_HOST=  
-REDIS_PORT=  
-REDIS_PASSWORD=  
-REDIS_DB=  
-REDIS_POOLSIZE=  
-REDIS_VOL_CONF_PATH=  
-REDIS_VOL_DATA_PATH=  
-#### 后端网关配置
-TEDGEOPEN_URL=  
-TEDGEOPEN_PORT=  
-TEDGEOPEN_VOL_LOG_PATH=  
-#### 基础服务配置
-BASIC_URL=  
-BASIC_PORT=  
-BASIC_VOL_LOG_PATH=  
-#### 前端网关配置
-FGW_PORT=  
-#### 用于云项目获取项目信息接口加密（rsa的公私钥）
-PUBLIC_KEY=  
-PRIVATE_KEY=  
-### 3. 启动服务
-####Linux:
-./startup.sh -devc yourDeveloperCode -devk yourDeveloperKey  
-示例 ./startup.sh -devc testCode -devk testKey
-#### Windows:
-startup.bat
+
+## 快速开始
+### 申请开发者账号 developerCode/secretKey
+
+### 修改 .env 配置文件
+
+查看和修改 .env 文件
+
+### 启动服务
+
+```bash
+docker-compose up
+```
+
+如果想要后台启动服务， 可以添加 `-d` 参数
+
+```bash
+docker-compose up -d
+
+```
 ### 关闭服务
-#### Linux:
-./stop.sh
-#### Windows:
-stop.bat
 
-#### 数据目录
+```bash
+docker-compose down
+```
+
+## 相关目录
+
+数据目录
+
+```
 ./redis/data
+```
 
-#### 日志目录
-./tedgeopen/logs  
+日志目录
+
+```
+./tedgeopen/logs
 ./sdf-basic-micro/logs
+```
 

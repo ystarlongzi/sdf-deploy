@@ -12,9 +12,15 @@
 ## 快速开始
 ### 申请开发者账号 developerCode/secretKey
 
-### 修改 .env 配置文件
+### 创建 .env 配置文件
 
-查看和修改 .env 文件
+基于 _env 创建 .env 文件
+```bash
+cp _env .env
+```
+
+编辑 .env 文件， 添加你的配置
+
 ```
 DEVELOPER_CODE= 您的开发者Code
 DEVELOPER_KEY= 您的开发者SecretKey

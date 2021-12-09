@@ -2,7 +2,7 @@
 
 ## 运行环境
 
-- 操作系统：支持linux CentOS，Windows，暂不支持 mac M1
+- 操作系统：支持 linux CentOS，Windows，Mac
 - 软件环境：[Docker](https://www.docker.com)、[Docker-compose](https://docs.docker.com/compose/install)
 - 端口：默认 2828、 3000、 9881 端口
 - CPU&内存：1核1G（最小），2核2G（推荐）

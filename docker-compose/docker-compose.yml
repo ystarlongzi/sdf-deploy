@@ -9,73 +9,25 @@ services:
     volumes:
       - './redis/conf/redis.conf:/etc/redis/redis.conf'
       - './redis/data:/data'
-  ## 后端网关
-  tedgeopen:
-    image: iotportal/tedgeopen:isv1.0.1
-    container_name: tedgeopen
-    links:
-      - redis
-    environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_DB: 0
-      REDIS_POOLSIZE: 10
-      WEBPORT: 2828
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
-    ports:
-      - 2828:2828
-    volumes:
-      - './logs/tedgeopen-log:/home/docker/logs'
-    restart: always
-  ## 基础服务
-  sdf-basic-micro:
-    image: iotportal/sdf-basic-micro:latest
-    links:
-      - redis
-      - tedgeopen
-    container_name: sdf-basic-micro
-    volumes:
-      - './logs/basic-log:/data/app/logs'
-    environment:
-      HIGHWAY_URL: ${OPEN_API}
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      PORT: 9881
-      DEVELOPER_CODE: ${DEVELOPER_CODE}
-      DEVELOPER_KEY: ${DEVELOPER_KEY}
-      MICRO_APP_EXTERNAL_HOST: ${MICRO_APP_EXTERNAL_HOST}
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
-    ports:
-      - 9881:9881
-    depends_on:
-      - redis
-      - tedgeopen
-    restart: always
+
   ## 前端网关
   sdf-fgw:
     image: iotportal/sdf-gw:latest
     links:
-      - tedgeopen
       - redis
-      - sdf-basic-micro
     container_name: sdf-fgw
     environment:
-      MICRO_APP_RESOURCE_PREFIX: ${MICRO_APP_EXTERNAL_HOST}/sdf/micro-app/developer/app/resources
-      CUSTOM_HIGHWAY_URL: http://tedgeopen:2828
+      DEVELOPER_CODE: ${DEVELOPER_CODE}
+      DEVELOPER_KEY: ${DEVELOPER_KEY}
       HIGHWAY_URL: ${OPEN_API}
-      MICRO_APP_WEB_URL: http://sdf-basic-micro:9881
-      MICRO_APP_WEB_PRIVATE_KEY: ${PRIVATE_KEY}
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: ${REDIS_PASSWORD}
-      DEVELOPER_CODE: ${DEVELOPER_CODE}
+      CUSTOM_API_URL: ${CUSTOM_API_URL}
       NODE_ENV: production
-      DEVELOPER_KEY: ${DEVELOPER_KEY}
       PORT: 3000
     depends_on:
-      - tedgeopen
       - redis
-      - sdf-basic-micro
     ports:
       - 3000:3000
     restart: always
